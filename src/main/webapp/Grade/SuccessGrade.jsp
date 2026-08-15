@@ -30,10 +30,10 @@
 <body>
 
     <div class="success">
-        Student added successfully!! ✅
+        Grade added successfully!! ✅
     </div>
 
-    <a href="${pageContext.request.contextPath}/students/addStudent.jsp">Go Back</a>
+    <a href="assignCourse.jsp">Back to Grade Form</a>
 
 </body>
 </html>
