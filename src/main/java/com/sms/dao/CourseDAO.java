@@ -7,32 +7,70 @@ import com.sms.util.DBConnection;
 
 public class CourseDAO {
 
+	public boolean courseExists(String courseName) {
+
+	    try {
+	        Connection con = DBConnection.getConnection();
+
+	        String sql =
+	            "SELECT 1 FROM course WHERE course_name = ?";
+
+	        PreparedStatement ps = con.prepareStatement(sql);
+
+	        ps.setString(1, courseName);
+
+	        ResultSet rs = ps.executeQuery();
+
+	        boolean exists = rs.next();
+
+	        rs.close();
+	        ps.close();
+	        con.close();
+
+	        return exists;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
     // Add Course
-    public void addCourse(Course c) {
+	public String addCourse(Course c) {
 
-        try {
-            Connection con = DBConnection.getConnection();
+	    // Duplicate Course Check
+	    if (courseExists(c.getCourseName())) {
+	        System.out.println("Course already exists ❌");
+	        return "duplicate";
+	    }
 
-            PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO course(course_id, course_name, duration) VALUES(?,?,?)"
-            );
+	    try {
+	        Connection con = DBConnection.getConnection();
 
-            ps.setInt(1, c.getCourseId());
-            ps.setString(2, c.getCourseName());
-            ps.setString(3, c.getDuration());
+	        PreparedStatement ps = con.prepareStatement(
+	            "INSERT INTO course(course_id, course_name, duration) VALUES(?,?,?)"
+	        );
 
-            int rows = ps.executeUpdate();
+	        ps.setInt(1, c.getCourseId());
+	        ps.setString(2, c.getCourseName());
+	        ps.setString(3, c.getDuration());
 
-            if (rows > 0) {
-                System.out.println("Course Added Successfully ✅");
-            } else {
-                System.out.println("Failed to Add Course ❌");
-            }
+	        int rows = ps.executeUpdate();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	        ps.close();
+	        con.close();
+
+	        if (rows > 0) {
+	            System.out.println("Course Added Successfully ✅");
+	            return "success";
+	        }
+
+	        return "error";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+	}
 
 
     // View All Courses

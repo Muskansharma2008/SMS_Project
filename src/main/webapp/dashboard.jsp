@@ -2,7 +2,7 @@
 <%
 String user = (String) session.getAttribute("user");
 if (user == null) {
-    response.sendRedirect("Login.jsp");
+    response.sendRedirect(request.getContextPath() + "Login.jsp");
     return;
 }
 %>
@@ -25,66 +25,6 @@ body {
     background: #f4f6f8;
     min-height: 100vh;
     color: #222831;
-}
-
-/* Sidebar */
-.sidebar {
-    width: 240px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: #222831;
-    color: white;
-    padding: 25px 15px;
-    z-index: 1000;
-}
-
-.logo {
-    text-align: center;
-    font-size: 25px;
-    font-weight: bold;
-    margin-bottom: 40px;
-    letter-spacing: 1px;
-}
-
-.menu-title {
-    color: #9ca3af;
-    font-size: 12px;
-    margin: 20px 15px 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.sidebar a {
-    display: block;
-    text-decoration: none;
-    color: #e5e7eb;
-    padding: 13px 15px;
-    margin-bottom: 8px;
-    border-radius: 7px;
-    font-size: 15px;
-    transition: all 0.3s ease;
-}
-
-.sidebar a:hover {
-    background: #393e46;
-    padding-left: 20px;
-}
-
-.sidebar a.active {
-    background: #3498db;
-    color: white;
-    box-shadow: 0 4px 10px rgba(52,152,219,0.3);
-}
-
-.logout-link {
-    margin-top: 35px;
-    background: #c0392b;
-}
-
-.logout-link:hover {
-    background: #e74c3c !important;
 }
 
 /* Main */
@@ -242,10 +182,6 @@ body {
 }
 
 @media (max-width: 700px) {
-    .sidebar {
-        width: 190px;
-    }
-
     .main {
         margin-left: 190px;
         padding: 20px;
@@ -266,38 +202,7 @@ body {
 
 <body>
 
-<div class="sidebar">
-    <div class="logo">SMS Admin</div>
-
-    <div class="menu-title">Main Menu</div>
-
-    <a href="${pageContext.request.contextPath}/dashboard.jsp" class="active">
-        Dashboard
-    </a>
-
-    <a href="${pageContext.request.contextPath}/students/addStudent.jsp">
-        Students
-    </a>
-
-    <a href="${pageContext.request.contextPath}/Course/addCourse.jsp">
-        Courses
-    </a>
-
-    <a href="${pageContext.request.contextPath}/Grade/assignCourse.jsp">
-        Marks & Grades
-    </a>
-
-    <a href="${pageContext.request.contextPath}/ViewCourseServlet">
-        View Courses
-    </a>
-
-    <a href="${pageContext.request.contextPath}/logout"
-       class="logout-link"
-       onclick="return confirmLogout();">
-        Logout
-    </a>
-</div>
-
+<%@ include file="Sidebar.jsp" %>
 <div class="main">
 
     <div class="topbar">
@@ -336,15 +241,6 @@ body {
             <a class="btn"
                href="${pageContext.request.contextPath}/Grade/assignCourse.jsp">
                 Manage Marks
-            </a>
-        </div>
-
-        <div class="card">
-            <h3>Available Courses</h3>
-            <p>View all courses currently available in the system.</p>
-            <a class="btn"
-               href="${pageContext.request.contextPath}/ViewCourseServlet">
-                View Courses
             </a>
         </div>
 
@@ -414,10 +310,6 @@ window.addEventListener("load", function() {
         }, index * 120);
     });
 });
-
-function confirmLogout() {
-    return confirm("Are you sure you want to logout?");
-}
 
 const buttons = document.querySelectorAll(".btn");
 

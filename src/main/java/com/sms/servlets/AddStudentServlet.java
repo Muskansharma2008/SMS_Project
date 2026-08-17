@@ -28,8 +28,34 @@ public class AddStudentServlet extends HttpServlet {
            s.setEmail(email);
            s.setPhone(phone);
         
-           new StudentDAO().addStudent(s);
-           resp.sendRedirect(req.getContextPath() + "/students/successAdd.jsp");
+           StudentDAO dao = new StudentDAO();
+
+           String result = dao.addStudent(s);
+
+           if ("success".equals(result)) {
+
+               resp.sendRedirect(
+                   req.getContextPath() + "/students/successAdd.jsp"
+               );
+
+           } else if ("duplicate".equals(result)) {
+
+               resp.setContentType("text/html;charset=UTF-8");
+
+               resp.getWriter().println(
+                   "<div style='text-align:center;margin-top:100px;font-family:Arial'>" +
+                   "<h2>Student Already Registered</h2>" +
+                   "<p>This student is already registered in the system.</p>" +
+                   "<button onclick='history.back()'>Go Back</button>" +
+                   "</div>"
+               );
+
+           } else {
+
+               resp.getWriter().println(
+                   "<h2>Unable to Add Student</h2>"
+               );
+           }
         }catch (Exception e) {
             e.printStackTrace();
             resp.getWriter().println("Error adding student");

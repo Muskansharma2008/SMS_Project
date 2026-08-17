@@ -75,7 +75,37 @@ public boolean courseExists(int courseId) {
     return exists;
 }
 
+public boolean gradeExists(int studentId, int courseId) {
 
+    boolean exists = false;
+
+    try {
+        Connection con = DBConnection.getConnection();
+
+        String sql =
+                "SELECT 1 FROM grade WHERE student_id = ? AND course_id = ?";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setInt(1, studentId);
+        ps.setInt(2, courseId);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            exists = true;
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return exists;
+}
 // =========================
 // Add Grade
 // =========================
@@ -126,7 +156,12 @@ public String addGrade(Grade g) {
             return "course";
         }
 
+        if (gradeExists(g.getStudentId(), g.getCourseId())) {
 
+            System.out.println("Grade already exists ❌");
+
+            return "duplicate";
+        }
         // =========================
         // Insert Grade
         // =========================

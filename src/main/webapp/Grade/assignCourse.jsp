@@ -178,7 +178,7 @@ body{
 </head>
 
 <body>
-
+<%@ include file="../Sidebar.jsp" %>
 <div class="container">
 
     <div class="header">
